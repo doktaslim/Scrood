@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout/Layout";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import LearnImg from "../assets/img/learning.svg";
 import GoogleLogin from "react-google-login";
 import { GoogleLoginID } from "../config/GoogleLogin";
@@ -17,13 +18,23 @@ const styles = {
   },
 };
 
-const Home = (props) => {
-  const responseGoogle = (user) => {
-    sessionStorage.setItem("user", JSON.stringify(user));
-    props.history.push(DASHBOARD);
+const Home = props => {
+  const [loading, setLoading] = useState(false)
+
+  const responseGoogle = async user => {
+    try {
+      setLoading(true)
+      console.log(user)
+      await sessionStorage.setItem("user", JSON.stringify(user));
+      setLoading(false)
+      return props.history.push(DASHBOARD);
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
   };
 
-  return (
+  return loading ? <Spinner variant="primary" animation="border" /> : (
     <Layout>
       <Container fluid>
         <Row>
@@ -40,7 +51,7 @@ const Home = (props) => {
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
                 >
-                  Sign Up as Student
+                  Sign Up Now
                 </Button>
               )}
               buttonText="Login"
