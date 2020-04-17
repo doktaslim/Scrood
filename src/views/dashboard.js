@@ -9,20 +9,23 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getVideos = Axios.get(` https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`, {
+    setLoading(true);
+    Axios.get(` https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`, {
       params: {
         part: 'snippet',
         chart: 'mostpopular',
         maxResults: 10
       }
     }).then(res => {
+      setLoading(false)
       console.log(res.data)
+      setVideos(res.data.items)
     })
   }, [])
 
-  return (
+  return loading ? <div className="loading loading-lg" style={{ marginTop: "45vh" }}></div> : (
     <UserLayout>
-        <VideoFeeds />
+        <VideoFeeds videos={videos} />
     </UserLayout>
   );
 };
