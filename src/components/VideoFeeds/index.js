@@ -10,17 +10,22 @@ const VideoFeeds = (props) => {
               <div className="card" style={{ margin: "20px" }}>
                 <div className="card-image">
                   <img
-                    src={video.snippet.thumbnails.default.url}
+                    src={video.snippet.thumbnails.standard.url}
                     alt=""
                     className="img-responsive"
                     style={{ width: "100%", height: "100%" }}
                   />
                 </div>
+                <div className="card-header">
+                  <div className="card-title h5">{video.snippet.title}</div>
+                </div>
                 <div className="card-body">
-                  <p style={{ fontSize: "15px" }}>{video.snippet.title}</p>
-                  <p style={{ fontSize: "13px" }}>
+                  <p style={{ fontSize: "13px", display: 'flex', flexWrap: 'wrap' }}>
                     {video.snippet.description}
                   </p>
+                </div>
+                <div className="card-footer">
+                  <button className="btn btn-primary">...</button>
                 </div>
               </div>
             </div>
