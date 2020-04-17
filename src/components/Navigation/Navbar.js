@@ -1,21 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Navbar from "react-bootstrap/Navbar"
-import Container from "react-bootstrap/Container";
-import { HOME } from "../../routes/router";
+import { HOME, LOGIN, REGISTER } from "../../routes/router";
+
+const styles = {
+  navbar: {
+    height: "60px",
+    padding: "10px 25px"
+  }
+}
 
 const Navigation = () => {
   return (
-    <>
-      <Navbar bg="light" expand="sm">
-        <Container fluid>
-          <Navbar.Brand>
-            <Link to={HOME}>UDEMY_CLONE</Link>
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-    </>
+    <header className="navbar bg-secondary" style={styles.navbar}>
+      <section className="navbar-section">
+        <Link to={HOME} className="navbar-brand">UDEMY_CLONE</Link>
+      </section>
+      <section className="navbar-section">
+        <Link to={LOGIN} className="btn btn-link">Login</Link>
+        <Link to={REGISTER} className="btn btn-link">Register</Link>
+      </section>
+    </header>
   );
 };
 
+
 export default Navigation;
+

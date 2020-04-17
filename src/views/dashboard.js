@@ -1,15 +1,30 @@
-import React from 'react'
-import UserLayout from '../components/Layout/UserLayout'
-import Container from 'react-bootstrap/Container'
+import React, { useState, useEffect } from "react";
+import UserLayout from "../components/Layout/UserLayout";
+import VideoFeeds from "../components/VideoFeeds";
+import Axios from "axios";
+import { GoogleConfig } from "../config/GoogleLogin";
 
 const Dashboard = () => {
-    return (
-        <UserLayout>
-            <Container fluid>
-                Hello
-            </Container>
-        </UserLayout>
-    )
-}
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-export default Dashboard
+  useEffect(() => {
+    const getVideos = Axios.get(` https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`, {
+      params: {
+        part: 'snippet',
+        chart: 'mostpopular',
+        maxResults: 10
+      }
+    }).then(res => {
+      console.log(res.data)
+    })
+  }, [])
+
+  return (
+    <UserLayout>
+        <VideoFeeds />
+    </UserLayout>
+  );
+};
+
+export default Dashboard;
