@@ -3,23 +3,24 @@ import { Link } from "react-router-dom";
 import { HOME } from "../../routes/router";
 import { GoogleLogout } from "react-google-login";
 import { GoogleConfig } from "../../config/GoogleLogin";
-import Search from "../Search";
 
 const styles = {
   userImg: {
     height: "40px",
     width: "40px",
-    borderRadius: "50px", 
+    borderRadius: "50px",
     marginRight: "10px",
   },
   navbar: {
     height: "60px",
-    padding: "10px 20px"
-  }
+    padding: "10px 20px",
+  },
 };
 
 const UserNavbar = (props) => {
   const [user, setUser] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let data = JSON.parse(sessionStorage.getItem("user"));
@@ -28,23 +29,26 @@ const UserNavbar = (props) => {
   }, []);
 
   const logout = () => {
+    setLoading(true);
     try {
       sessionStorage.removeItem("user");
-      props.history.push(HOME);
+      setLoading(false);
+      return props.history.push(HOME);
     } catch (error) {
-      console.log(error.details);
+      setLoading(false);
+      console.log(error.message);
+      setErrorMessage(error.message);
     }
   };
 
-  return (
+  return loading ? (
+    <div className="loading loading-lg"></div>
+  ) : (
     <header className="navbar bg-secondary" style={styles.navbar}>
       <section className="navbar-section">
         <Link to={HOME} className="navbar-brand">
-          UDEMY_CLONE
+          UDEMY-CLONE
         </Link>
-      </section>
-      <section className="navbar-center">
-        <Search />
       </section>
       <section className="navbar-section">
         <img
@@ -53,7 +57,9 @@ const UserNavbar = (props) => {
           alt={user.name}
           style={styles.userImg}
         />
-        <span style={{ marginRight: '20px', fontSize: '13px' }}>{user.name}</span>
+        <span style={{ marginRight: "20px", fontSize: "13px" }}>
+          {user.name}
+        </span>
         <GoogleLogout
           clientId={GoogleConfig.client_id}
           render={(renderProps) => (
@@ -68,6 +74,7 @@ const UserNavbar = (props) => {
           buttonText="Logout"
           onLogoutSuccess={logout}
         />
+        {errorMessage ? <div className="toast toast-error"></div> : null}
       </section>
     </header>
   );

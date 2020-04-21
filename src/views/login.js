@@ -1,12 +1,7 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
-import { GoogleLogin } from "react-google-login";
-import { GoogleConfig } from "../config/GoogleLogin";
 
 const Login = () => {
-  const responseGoogle = (user) => {
-    
-  };
 
   return (
     <Layout>
@@ -36,17 +31,6 @@ const Login = () => {
                   >
                     Register
                   </button>
-                </div>
-                <hr />
-                <div style={{ textAlign: "center" }}>
-                  <GoogleLogin
-                    className="my-2"
-                    clientId={GoogleConfig.client_id}
-                    buttonText="Login With Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    cookiePolicy={"single_host_origin"}
-                  />
                 </div>
               </form>
             </div>

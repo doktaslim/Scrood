@@ -17,9 +17,9 @@ const Dashboard = () => {
         maxResults: 10
       }
     }).then(res => {
-      setLoading(false)
       console.log(res.data)
       setVideos(res.data.items)
+      setLoading(false)
     })
   }, [])
 
