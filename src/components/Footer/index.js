@@ -3,6 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <div>
+      <hr />
       <p style={{ textAlign: "center", fontSize: "12px", color: "#23r5f2" }}>
         Udemy-Clone created by Chiagoziem
       </p>

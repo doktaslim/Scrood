@@ -26,10 +26,6 @@ const Register = (props) => {
     }
   };
 
-  useEffect(() => {
-    responseGoogle();
-  });
-
   return (
     <Layout>
       <div className="columns">
@@ -74,8 +70,8 @@ const Register = (props) => {
                     className="my-2"
                     clientId={GoogleConfig.client_id}
                     buttonText="SignUp With Google"
-                    onSuccess={props.responseGoogle}
-                    onFailure={props.responseGoogle}
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
                     cookiePolicy={"single_host_origin"}
                   />
                 </div>
