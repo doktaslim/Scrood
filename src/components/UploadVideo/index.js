@@ -5,11 +5,11 @@ import { GoogleConfig } from "../../config/GoogleLogin";
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const uploadVideo = () => {
+  const uploadVideo = (e) => {
+    e.preventDefault();
     let token = sessionStorage.getItem("user");
     let accessToken = token.tc.access_token;
     setLoading(true);
@@ -24,7 +24,6 @@ const UploadVideo = () => {
         data: {
           title: title,
           description: description,
-          thumbnail: thumbnail,
           video: video,
         },
       }
@@ -66,17 +65,6 @@ const UploadVideo = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="thumbnail">Video Thumbnail</label>
-          <input
-            type="text"
-            className="form-input"
-            id="thumbnail"
-            onChange={(e) => setThumbnail(e.target.value)}
-            value={thumbnail}
           />
         </div>
 

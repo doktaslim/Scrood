@@ -2,11 +2,10 @@ import React from "react";
 import Layout from "../components/Layout/Layout";
 
 const Login = () => {
-
   return (
     <Layout>
-      <div className="columns">
-        <div className="column col-5 p-centered" style={{ marginTop: "10vh" }}>
+      <div className="columns" style={{ marginBottom: '170px' }}>
+        <div className="column col-sm-11 col-md-6 col-5 p-centered" style={{ marginTop: "10vh" }}>
           <div className="card">
             <div className="card-body">
               <h5>Login</h5>
@@ -29,7 +28,7 @@ const Login = () => {
                     className="btn btn-primary"
                     style={{ width: "100%", margin: "20px 0" }}
                   >
-                    Register
+                    Login
                   </button>
                 </div>
               </form>

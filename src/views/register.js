@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DASHBOARD } from "../routes/router";
 import { GoogleLogin } from "react-google-login";
 import { GoogleConfig } from "../config/GoogleLogin";
@@ -28,8 +28,8 @@ const Register = (props) => {
 
   return (
     <Layout>
-      <div className="columns">
-        <div className="column col-5 p-centered" style={{ marginTop: "10vh" }}>
+      <div className="columns" style={{ marginBottom: '35px' }}>
+        <div className="column col-sm-11 col-md-6 col-5 p-centered" style={{ marginTop: "10vh" }}>
           <div className="card">
             <div className="card-body">
               <h5>Register</h5>

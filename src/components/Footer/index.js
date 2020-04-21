@@ -2,12 +2,20 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div>
+    <footer>
       <hr />
-      <p style={{ textAlign: "center", fontSize: "12px", color: "#23r5f2" }}>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "12px",
+          color: "#23r5f2",
+          opacity: 0.5,
+          marginTop: "10px",
+        }}
+      >
         Udemy-Clone created by Chiagoziem
       </p>
-    </div>
+    </footer>
   );
 };
 
