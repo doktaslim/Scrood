@@ -5,26 +5,27 @@ import { GoogleConfig } from "../../config/GoogleLogin";
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [video, setVideo] = useState("");
+  // const [video, setVideo] = useState("");
   const [loading, setLoading] = useState(false);
 
   const uploadVideo = (e) => {
     e.preventDefault();
-    let token = sessionStorage.getItem("user");
-    let accessToken = token.tc.access_token;
+    let token = JSON.parse(sessionStorage.getItem("user"));
+    let accessToken = token.tokenObj.access_token;
     setLoading(true);
     Axios.post(
       `https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          Accept: "applicationCache/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         data: {
-          title: title,
-          description: description,
-          video: video,
+          snippet: {
+            title: title,
+            description: description,
+          },
         },
       }
     )
@@ -33,6 +34,7 @@ const UploadVideo = () => {
         console.log("Successfully Uploaded", res.data);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error.message);
       });
   };
@@ -74,8 +76,9 @@ const UploadVideo = () => {
             type="file"
             className="form-control-file"
             id="video"
-            onChange={(e) => setVideo(e.target.value)}
-            value={video}
+            name="video"
+            // onChange={(e) => setVideo(e.target.value)}
+            // value={video}
           />
         </div>
 

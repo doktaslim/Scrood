@@ -6,8 +6,8 @@ const VideoFeeds = (props) => {
       <div className="container">
         <div className="columns">
             {props.videos.map((video) => (
-          <div className="column col-sm-12 col-md-6 col-3">
-              <div className="card" style={{ margin: "20px" }} key={video.id}>
+          <div className="column col-sm-12 col-md-6 col-3" key={video.id}>
+              <div className="card" style={{ margin: "20px" }}>
                 <div className="card-image">
                   <img
                     src={video.snippet.thumbnails.standard.url}
