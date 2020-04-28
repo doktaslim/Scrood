@@ -3,6 +3,7 @@ import { DASHBOARD } from "../routes/router";
 import { GoogleLogin } from "react-google-login";
 import { GoogleConfig } from "../config/GoogleLogin";
 import Layout from "../components/Layout/Layout";
+import { Container, Card, Col, Form, Alert, Button } from "react-bootstrap";
 import Axios from "axios";
 
 const Register = (props) => {
@@ -28,42 +29,34 @@ const Register = (props) => {
 
   return (
     <Layout>
-      <div className="columns" style={{ marginBottom: '35px' }}>
-        <div className="column col-sm-11 col-md-6 col-5 p-centered" style={{ marginTop: "10vh" }}>
-          <div className="card">
-            <div className="card-body">
+      <Container fluid>
+        <Col sm={12} md={{ span: 6, offset: 3 }}>
+          <Card style={{ margin: "4rem" }}>
+            <Card.Body>
               <h5>Register</h5>
               <hr />
-              {errorMessage ? (
-                <div className="toast toast-error">{errorMessage}</div>
-              ) : null}
-              <form>
-                <div className="form-group">
-                  <label htmlFor="username" className="form-label">
-                    Name
-                  </label>
-                  <input type="text" className="form-input" id="username" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input type="email" id="email" className="form-input" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input type="password" className="form-input" id="password" />
-                </div>
-                <div className="form-group">
-                  <button
-                    className="btn btn-primary"
-                    style={{ width: "100%", margin: "20px 0" }}
-                  >
-                    Register
-                  </button>
-                </div>
+              <Form>
+                {errorMessage ? <Alert>{errorMessage}</Alert> : null}
+
+                <Form.Group>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="text" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control type="email" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" />
+                </Form.Group>
+
+                <Button variant="primary" size="md" block>
+                  Register
+                </Button>
+
                 <hr />
                 <div style={{ textAlign: "center" }}>
                   <GoogleLogin
@@ -75,11 +68,11 @@ const Register = (props) => {
                     cookiePolicy={"single_host_origin"}
                   />
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Container>
     </Layout>
   );
 };

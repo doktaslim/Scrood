@@ -1,43 +1,38 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
+import { Container, Card, Col, Form, Button } from "react-bootstrap";
 
 const Login = () => {
   return (
     <Layout>
-      <div className="columns" style={{ marginBottom: '170px' }}>
-        <div className="column col-sm-11 col-md-6 col-5 p-centered" style={{ marginTop: "10vh" }}>
-          <div className="card">
-            <div className="card-body">
+      <Container fluid>
+        <Col sm={12} md={{ span:6, offset: 3 }}>
+          <Card style={{ margin: "4rem" }}>
+            <Card.Body>
               <h5>Login</h5>
               <hr />
-              <form>
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input type="email" id="email" className="form-input" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input type="password" className="form-input" id="password" />
-                </div>
-                <div className="form-group">
-                  <button
-                    className="btn btn-primary"
-                    style={{ width: "100%", margin: "20px 0" }}
-                  >
-                    Login
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+              <Form>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control type="email" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" />
+                </Form.Group>
+
+                <Button variant="primary" size="md" block>
+                  Login
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Container>
     </Layout>
   );
 };
 
 export default Login;
+

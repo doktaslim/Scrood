@@ -1,28 +1,28 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 import { HOME, LOGIN, REGISTER } from "../../routes/router";
 
 const styles = {
   navbar: {
     height: "60px",
-    padding: "10px 25px"
+    padding: "10px 25px",
+    background: "#1b3331"
+  },
+  text: {
+    color: "#FFF"
   }
-}
+};
 
 const Navigation = () => {
   return (
-    <header className="navbar bg-secondary" style={styles.navbar}>
-      <section className="navbar-section">
-        <Link to={HOME} className="navbar-brand">UDEMY_CLONE</Link>
-      </section>
-      <section className="navbar-section">
-        <Link to={LOGIN} className="btn btn-link">Login</Link>
-        <Link to={REGISTER} className="btn btn-link">Register</Link>
-      </section>
-    </header>
+    <Navbar expand="lg" style={styles.navbar}>
+      <Navbar.Brand href={HOME} style={styles.text}>Udemy-Clone</Navbar.Brand>
+      <Nav className="ml-auto">
+        <Nav.Link href={LOGIN} style={styles.text}>Login</Nav.Link>
+        <Nav.Link href={REGISTER} style={styles.text}>Register</Nav.Link>
+      </Nav>
+    </Navbar>
   );
 };
 
-
 export default Navigation;
-

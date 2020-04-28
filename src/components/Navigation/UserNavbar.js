@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { HOME } from "../../routes/router";
 import { GoogleLogout } from "react-google-login";
 import { GoogleConfig } from "../../config/GoogleLogin";
+import { Navbar, Nav, Image, Spinner } from "react-bootstrap";
 
 const styles = {
   userImg: {
     height: "40px",
     width: "40px",
-    borderRadius: "50px",
+    // borderRadius: "50px",
     marginRight: "10px",
-  },
-  navbar: {
-    height: "60px",
-    padding: "10px 20px",
   },
 };
 
 const UserNavbar = (props) => {
   const [user, setUser] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,29 +32,23 @@ const UserNavbar = (props) => {
     } catch (error) {
       setLoading(false);
       console.log(error.message);
-      setErrorMessage(error.message);
     }
   };
 
   return loading ? (
-    <div className="loading loading-lg"></div>
+    <Spinner animation="border" variant="primary"></Spinner>
   ) : (
-    <header className="navbar bg-secondary" style={styles.navbar}>
-      <section className="navbar-section">
-        <Link to={HOME} className="navbar-brand">
-          UDEMY-CLONE
-        </Link>
-      </section>
-      <section className="navbar-section">
-        <img
+    <Navbar expand="lg">
+      <Navbar.Brand>Udemy-Clone</Navbar.Brand>
+      <Nav className="ml-auto">
+        <Image
           src={user.imageUrl}
-          className="img-responsive"
           alt={user.name}
           style={styles.userImg}
+          fluid
+          roundedCircle
         />
-        <span style={{ marginRight: "20px", fontSize: "13px" }}>
-          {user.name}
-        </span>
+        <p>{user.name}</p>
         <GoogleLogout
           clientId={GoogleConfig.client_id}
           render={(renderProps) => (
@@ -74,9 +63,8 @@ const UserNavbar = (props) => {
           buttonText="Logout"
           onLogoutSuccess={logout}
         />
-        {errorMessage ? <div className="toast toast-error"></div> : null}
-      </section>
-    </header>
+      </Nav>
+    </Navbar>
   );
 };
 

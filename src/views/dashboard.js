@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UserLayout from "../components/Layout/UserLayout";
 import VideoFeeds from "../components/VideoFeeds";
+import { Spinner } from "react-bootstrap";
 import Axios from "axios";
 import { GoogleConfig } from "../config/GoogleLogin";
 import UploadVideo from "../components/UploadVideo";
@@ -31,7 +32,11 @@ const Dashboard = () => {
   }, []);
 
   return loading ? (
-    <div className="loading loading-lg" style={{ marginTop: "45vh" }}></div>
+    <Spinner
+      animation="border"
+      variant="primary"
+      style={{ marginTop: "45vh", marginRight: "50%", marginLeft: "50%" }}
+    ></Spinner>
   ) : (
     <UserLayout>
       <UploadVideo />

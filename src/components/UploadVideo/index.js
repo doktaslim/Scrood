@@ -1,92 +1,102 @@
 import React, { useState } from "react";
+import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import Axios from "axios";
-import { GoogleConfig } from "../../config/GoogleLogin";
 
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  // const [video, setVideo] = useState("");
+  const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const uploadVideo = (e) => {
-    e.preventDefault();
-    let token = JSON.parse(sessionStorage.getItem("user"));
-    let accessToken = token.tokenObj.access_token;
-    setLoading(true);
-    Axios.post(
-      `https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          snippet: {
-            title: title,
-            description: description,
-          },
-        },
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const uploadWidget = window.cloudinary.createUploadWidget(
+    {
+      cloudName: "gozzycloud",
+      uploadPreset: "udemy-clone",
+    },
+    (err, result, id) => {
+      if (!err && result && result.event === "success") {
+        console.log("This is the result of the upload:", result);
+        setLoading(true);
+        const videoInfo = result.info.url;
+        Axios.post(`http://localhost:4000/users/${id}?_embed=videos`, {
+          ...videoInfo,
+          title: title,
+          description: description,
+          id: Math.floor(Math.random() * 1000).toString(),
+        })
+          .then((res) => {
+            setLoading(false);
+            console.log(res.data);
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.log(error);
+          });
+      } else {
+        console.log(err);
       }
-    )
-      .then((res) => {
-        setLoading(false);
-        console.log("Successfully Uploaded", res.data);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error.message);
-      });
+    }
+  );
+
+  const displayWidget = () => {
+    return uploadWidget.open();
   };
 
   return loading ? (
-    <div className="loading loading-lg" style={{ marginTop: "45vh" }}></div>
+    <Spinner animation="border" variant="primary" />
   ) : (
-    <div>
-      <form onSubmit={uploadVideo}>
-        <div className="form-group">
-          <label htmlFor="video" className="form-label">
-            Video Title
-          </label>
-          <input
-            type="text"
-            className="form-input"
-            id="video"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
+    <>
+      {/* <Button variant="primary" onClick={displayWidget}>
+        Upload Video
+      </Button> */}
+      <Button variant="primary" onClick={handleShow}>
+        Upload Video
+      </Button>
 
-        <div className="form-group">
-          <label htmlFor="description" className="form-label">
-            Video Description
-          </label>
-          <input
-            type="text"
-            className="form-input"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="video">Upload Video</label>
-          <input
-            type="file"
-            className="form-control-file"
-            id="video"
-            name="video"
-            // onChange={(e) => setVideo(e.target.value)}
-            // value={video}
-          />
-        </div>
-
-        <div className="form-group">
-          <button className="btn btn-primary">Upload Video</button>
-        </div>
-      </form>
-    </div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Video</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>Video Title</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Video Description</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Select Video</Form.Label>
+              <Form.Control type="file" onClick={displayWidget} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" size="sm" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" size="sm">
+            Upload
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 
