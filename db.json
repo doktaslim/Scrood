@@ -6,5 +6,24 @@
       "email": "gozzypat@gmail.com"
     }
   ],
-  "videos": []
+  "videos": [
+    {
+      "id": "394",
+      "title": "title",
+      "description": "description",
+      "video": "https://res.cloudinary.com/gozzycloud/image/upload/v1588273633/udemy/IMG_20190422_111548_332_unhj3o.jpg"
+    },
+    {
+      "id": "904",
+      "title": "new ",
+      "description": "new description",
+      "video": "https://res.cloudinary.com/gozzycloud/image/upload/v1588273633/udemy/IMG_20190422_111548_332_unhj3o.jpg"
+    },
+    {
+      "id": "779",
+      "title": "video",
+      "description": "vid",
+      "video": "https://res.cloudinary.com/gozzycloud/video/upload/v1588273900/udemy/WIN_20200421_15_25_13_Pro_omswn2.mp4"
+    }
+  ]
 }

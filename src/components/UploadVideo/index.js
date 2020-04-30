@@ -5,53 +5,43 @@ import Axios from "axios";
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [video, setVideo] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
+  const getVideo = (e) => {
+    let file = e.target.files[0];
+    // setVideo(file)
+    const formData = new FormData();
+    formData.append("upload_preset", "udemy-clone")
+    formData.append("file", file)
+    const cloudName = "gozzycloud";
+    Axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData)
+    .then(res => setVideo(res.data.secure_url))
+  }
 
-  const uploadWidget = window.cloudinary.createUploadWidget(
-    {
-      cloudName: "gozzycloud",
-      uploadPreset: "udemy-clone",
-    },
-    (err, result, id) => {
-      if (!err && result && result.event === "success") {
-        console.log("This is the result of the upload:", result);
-        setLoading(true);
-        const videoInfo = result.info.url;
-        Axios.post(`http://localhost:4000/users/${id}?_embed=videos`, {
-          ...videoInfo,
-          title: title,
-          description: description,
-          id: Math.floor(Math.random() * 1000).toString(),
-        })
-          .then((res) => {
-            setLoading(false);
-            console.log(res.data);
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.log(error);
-          });
-      } else {
+  const uploadVideo = (e, id) => {
+    e.preventDefault();
+      Axios.post(`http://localhost:4000/videos`, {
+        id: Math.floor(Math.random() * 1000).toString(),
+        title: title,
+        description: description,
+        video: video
+      }).then(res => {
+        console.log(res.data)
+      }).catch(err => {
         console.log(err);
-      }
-    }
-  );
+      })
+  }
 
-  const displayWidget = () => {
-    return uploadWidget.open();
-  };
 
   return loading ? (
-    <Spinner animation="border" variant="primary" />
+    <Spinner animation="border" variant="primary"></Spinner>
   ) : (
     <>
-      {/* <Button variant="primary" onClick={displayWidget}>
-        Upload Video
-      </Button> */}
       <Button variant="primary" onClick={handleShow}>
         Upload Video
       </Button>
@@ -83,17 +73,17 @@ const UploadVideo = () => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Select Video</Form.Label>
-              <Form.Control type="file" onClick={displayWidget} />
+              <Form.Control type="file" onChange={getVideo} />
             </Form.Group>
+          <Button variant="primary" size="sm" onClick={uploadVideo}>
+            Upload
+          </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" size="sm" onClick={handleClose}>
+          {/* <Button variant="secondary" size="sm" onClick={handleClose}>
             Close
-          </Button>
-          <Button variant="primary" size="sm">
-            Upload
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
     </>

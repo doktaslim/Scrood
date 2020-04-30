@@ -10,37 +10,42 @@ const Dashboard = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // const fetchVideos = () => {
+  //   setLoading(true);
+  //   Axios.get(
+  //     ` https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`,
+  //     {
+  //       params: {
+  //         part: "snippet",
+  //         chart: "mostpopular",
+  //         maxResults: 10,
+  //       },
+  //     }
+  //   ).then((res) => {
+  //     setLoading(false);
+  //     setVideos(res.data.items);
+  //   }).catch(error => {
+  //     console.log(error);
+  //   });
+  // };
+
   const fetchVideos = () => {
-    setLoading(true);
-    Axios.get(
-      ` https://www.googleapis.com/youtube/v3/videos?key=${GoogleConfig.api_key}`,
-      {
-        params: {
-          part: "snippet",
-          chart: "mostpopular",
-          maxResults: 10,
-        },
-      }
-    ).then((res) => {
-      setLoading(false);
-      setVideos(res.data.items);
-    });
-  };
+    Axios.get(`http://localhost:4000/videos`).then(res => {
+      console.log(res.data)
+      setVideos(res.data)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   useEffect(() => {
     return fetchVideos();
   }, []);
 
-  return loading ? (
-    <Spinner
-      animation="border"
-      variant="primary"
-      style={{ marginTop: "45vh", marginRight: "50%", marginLeft: "50%" }}
-    ></Spinner>
-  ) : (
+  return (
     <UserLayout>
       <UploadVideo />
-      <VideoFeeds videos={videos} />
+      { loading ? <Spinner animation="border" variant="primary"></Spinner> : <VideoFeeds videos={videos} /> }
     </UserLayout>
   );
 };
