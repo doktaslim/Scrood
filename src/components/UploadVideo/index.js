@@ -11,32 +11,40 @@ const UploadVideo = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
+
   const getVideo = (e) => {
     let file = e.target.files[0];
-    // setVideo(file)
     const formData = new FormData();
-    formData.append("upload_preset", "udemy-clone")
-    formData.append("file", file)
+    formData.append("upload_preset", "udemy-clone");
+    formData.append("file", file);
     const cloudName = "gozzycloud";
-    Axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData)
-    .then(res => setVideo(res.data.secure_url))
-  }
+    Axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      formData
+    ).then((res) => {
+      setVideo(res.data);
+    });
+  };
 
-  const uploadVideo = (e, id) => {
+  const uploadVideo = (e) => {
     e.preventDefault();
-      Axios.post(`http://localhost:4000/videos`, {
-        id: Math.floor(Math.random() * 1000).toString(),
-        title: title,
-        description: description,
-        video: video
-      }).then(res => {
-        console.log(res.data)
-      }).catch(err => {
-        console.log(err);
+    setLoading(true);
+    Axios.post(`http://localhost:4000/videos`, {
+      id: Math.floor(Math.random() * 1000).toString(),
+      title: title,
+      description: description,
+      video: video,
+    })
+      .then((res) => {
+        setLoading(false);
+        console.log(res.data);
+        const videoData = res.data;
+        localStorage.setItem("videoData", videoData);
       })
-  }
-
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return loading ? (
     <Spinner animation="border" variant="primary"></Spinner>
@@ -75,16 +83,11 @@ const UploadVideo = () => {
               <Form.Label>Select Video</Form.Label>
               <Form.Control type="file" onChange={getVideo} />
             </Form.Group>
-          <Button variant="primary" size="sm" onClick={uploadVideo}>
-            Upload
-          </Button>
+            <Button variant="primary" size="sm" onClick={uploadVideo}>
+              Upload
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          {/* <Button variant="secondary" size="sm" onClick={handleClose}>
-            Close
-          </Button> */}
-        </Modal.Footer>
       </Modal>
     </>
   );
