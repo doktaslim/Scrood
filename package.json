@@ -21,8 +21,7 @@
     "json": "json-server --watch db.json --port 4000",
     "dev": "concurrently \"npm start\" \"npm run json\"",
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "heroku-build": "concurrently \"npm run build\" \"npm run json\""
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

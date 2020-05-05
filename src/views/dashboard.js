@@ -19,7 +19,7 @@ const Dashboard = () => {
       setLoading(false)
     }).catch(err => {
       console.log(err);
-      setLoading(false)
+      setLoading(false);
     })
   }
 
