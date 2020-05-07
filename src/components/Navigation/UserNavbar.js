@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { HOME } from "../../routes/router";
 import { GoogleLogout } from "react-google-login";
-import { GoogleConfig } from "../../config/GoogleLogin";
 import { Navbar, Nav, Image, Spinner } from "react-bootstrap";
 
 const styles = {
+  navbar: {
+    height: "60px",
+    padding: "10px 25px",
+    background: "#1b3331"
+  },
+  text: {
+    color: "#FFF"
+  },
   userImg: {
     height: "40px",
     width: "40px",
@@ -38,8 +45,8 @@ const UserNavbar = (props) => {
   return loading ? (
     <Spinner animation="border" variant="primary"></Spinner>
   ) : (
-    <Navbar expand="lg">
-      <Navbar.Brand>Udemy-Clone</Navbar.Brand>
+    <Navbar expand="lg" style={styles.navbar}>
+      <Navbar.Brand style={styles.text}>Udemy-Clone</Navbar.Brand>
       <Nav className="ml-auto">
         <Image
           src={user.imageUrl}
@@ -48,14 +55,15 @@ const UserNavbar = (props) => {
           fluid
           roundedCircle
         />
-        <p>{user.name}</p>
+        <p style={{ marginTop: "10px", color: "#FFF" }}>{user.name}</p>
         <GoogleLogout
-          clientId={GoogleConfig.client_id}
+          clientId={process.env.REACT_APP_CLIENT_ID}
           render={(renderProps) => (
             <button
               className="btn btn-error"
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
+              style={{ background: "red", color: "#FFF", marginLeft: "10px" }}
             >
               <i className="fas fa-power-off"></i>
             </button>

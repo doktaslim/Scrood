@@ -4,6 +4,7 @@ import VideoFeeds from "../components/VideoFeeds";
 import { Spinner } from "react-bootstrap";
 import Axios from "axios";
 import UploadVideo from "../components/UploadVideo";
+import ReactPlayer from "react-player";
 
 const Dashboard = () => {
   const [videos, setVideos] = useState([]);
@@ -13,9 +14,7 @@ const Dashboard = () => {
     setLoading(true)
     Axios.get(`http://localhost:4000/videos`).then(res => {
       const videoData = res.data;
-      const video = localStorage.getItem("videoData", videoData)
-      console.log(video)
-      setVideos(videos)
+      setVideos(videoData)
       setLoading(false)
     }).catch(err => {
       console.log(err);
@@ -24,14 +23,25 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    return fetchVideos();
-  }, []);
+    fetchVideos()
+  }, [])
+
+
+  const starVideo = ({id}) => {
+    console.log("video starred", id);
+  }
+
+
+  const playVideo = () => {
+    // return <ReactPlayer url="" controls />;
+    console.log("wanna play video");
+  };
   
 
   return (
     <UserLayout>
       <UploadVideo />
-      { loading ? <Spinner animation="border" variant="primary" style={{ margin: "25vh auto" }}></Spinner> : <VideoFeeds videos={videos} /> }
+      { loading ? <Spinner animation="border" variant="primary" style={{ margin: "25vh auto" }}></Spinner> : <VideoFeeds playVideo={playVideo} starVideo={starVideo} videos={videos} /> }
     </UserLayout>
   );
 };

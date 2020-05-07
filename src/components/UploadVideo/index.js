@@ -17,9 +17,8 @@ const UploadVideo = () => {
     const formData = new FormData();
     formData.append("upload_preset", "udemy-clone");
     formData.append("file", file);
-    const cloudName = "gozzycloud";
     Axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/upload`,
       formData
     ).then((res) => {
       setVideo(res.data);
@@ -35,11 +34,15 @@ const UploadVideo = () => {
       description: description,
       video: video,
     })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
-        console.log(res.data);
-        const videoData = res.data;
-        localStorage.setItem("videoData", videoData);
+        return (
+          (
+            <h5 style={{ textAlign: "center", margin: "20vh 0" }}>
+              Video Uploaded
+            </h5>
+          ) && setShow(false)
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -83,9 +86,15 @@ const UploadVideo = () => {
               <Form.Label>Select Video</Form.Label>
               <Form.Control type="file" onChange={getVideo} />
             </Form.Group>
-            <Button variant="primary" size="sm" onClick={uploadVideo}>
-              Upload
-            </Button>
+            {video === "" ? (
+              <Button disabled variant="primary" size="sm">
+                Upload
+              </Button>
+            ) : (
+              <Button variant="primary" size="sm" onClick={uploadVideo}>
+                Upload
+              </Button>
+            )}
           </Form>
         </Modal.Body>
       </Modal>

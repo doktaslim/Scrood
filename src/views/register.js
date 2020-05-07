@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { DASHBOARD } from "../routes/router";
 import { GoogleLogin } from "react-google-login";
-import { GoogleConfig } from "../config/GoogleLogin";
 import Layout from "../components/Layout/Layout";
 import { Container, Card, Col, Form, Alert, Button } from "react-bootstrap";
 import Axios from "axios";
@@ -61,7 +60,7 @@ const Register = (props) => {
                 <div style={{ textAlign: "center" }}>
                   <GoogleLogin
                     className="my-2"
-                    clientId={GoogleConfig.client_id}
+                    clientId={process.env.REACT_APP_CLIENT_ID}
                     buttonText="SignUp With Google"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
