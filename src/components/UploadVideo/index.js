@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Spinner } from "react-bootstrap";
 import Axios from "axios";
+import Firebase from '../../Firebase'
 
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
@@ -12,10 +13,24 @@ const UploadVideo = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
+  let db = Firebase.firestore();
+  db.collection('Videos').add({
+    title: title,
+    description: description,
+    video: video,
+  }).then(docRef => {
+    console.log("Document written with ID: ", docRef.id)
+  }).catch(error => {
+    console.log(error)
+  })
+
+
   const getVideo = (e) => {
     let file = e.target.files[0];
+    let db = Firebase.firestore();
     const formData = new FormData();
-    formData.append("upload_preset", "udemy-clone");
+    // formData.append("upload_preset", "udemy-clone");
     formData.append("file", file);
     Axios.post(
       `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/upload`,
@@ -25,29 +40,30 @@ const UploadVideo = () => {
     });
   };
 
-  const uploadVideo = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    Axios.post(`http://localhost:4000/videos`, {
-      id: Math.floor(Math.random() * 1000).toString(),
-      title: title,
-      description: description,
-      video: video,
-    })
-      .then(() => {
-        setLoading(false);
-        return (
-          (
-            <h5 style={{ textAlign: "center", margin: "20vh 0" }}>
-              Video Uploaded
-            </h5>
-          ) && setShow(false)
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const uploadVideo = (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   Axios.post(`http://localhost:4000/videos`, {
+  //     title: title,
+  //     description: description,
+  //     video: video,
+  //   })
+  //     .then(() => {
+  //       setLoading(false);
+  //       return (
+  //         (
+  //           <h5 style={{ textAlign: "center", margin: "20vh 0" }}>
+  //             Video Uploaded
+  //           </h5>
+  //         ) && setShow(false)
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+
 
   return loading ? (
     <Spinner animation="border" variant="primary"></Spinner>

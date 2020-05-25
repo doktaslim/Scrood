@@ -1,38 +1,85 @@
-import React from "react";
-import Layout from "../components/Layout/Layout";
-import { Container, Card, Col, Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { withRouter } from 'react-router-dom'
+import { DASHBOARD } from "../routes/router";
+import {
+  Container,
+  Col,
+  Form,
+  Button,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import Firebase from "../Firebase";
 
-const Login = () => {
-  return (
-    <Layout>
-      <Container fluid>
-        <Col sm={12} md={{ span:6, offset: 3 }}>
-          <Card style={{ margin: "4rem" }}>
-            <Card.Body>
-              <h5>Login</h5>
-              <hr />
-              <Form>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control type="email" />
-                </Form.Group>
+const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" />
-                </Form.Group>
+  const loginUser = async(e) => {
+    e.preventDefault();
+    try {
+      if (email === "") return setErrorMessage("Please Input Your Email");
+      if (password === "") return setErrorMessage("Please Input Your Password");
+      else {
+        setLoading(true);
+        await Firebase.auth().signInWithEmailAndPassword(email, password);
+        setLoading(false);
+        return props.history.replace(DASHBOARD);
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage(error.message);
+    }
+  };
 
-                <Button variant="primary" size="md" block>
-                  Login
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Container>
-    </Layout>
+
+  return loading ? (
+    <Spinner animation="border" variant="primary" style={styles.spinner}></Spinner>
+  ) : (
+    <Container fluid>
+      <Col sm={12} md={{ span: 6, offset: 3 }}>
+        <h5 style={{ marginTop: '3rem' }}>Login</h5>
+        <hr />
+
+        <Form onSubmit={loginUser}>
+          {errorMessage ? (
+            <Alert variant="warning">{errorMessage}</Alert>
+          ) : null}
+          <Form.Group>
+            <Form.Label htmlFor="email">Email Address</Form.Label>
+            <Form.Control
+              type="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Control
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+
+          <Button variant="primary" size="md" type="submit" block>
+            Login
+          </Button>
+        </Form>
+      </Col>
+    </Container>
   );
 };
 
-export default Login;
+const styles = {
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+}
 
+export default withRouter(Login)

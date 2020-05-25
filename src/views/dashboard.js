@@ -1,48 +1,11 @@
-import React, { useState, useEffect } from "react";
-import UserLayout from "../components/Layout/UserLayout";
-import VideoFeeds from "../components/VideoFeeds";
-import { Spinner } from "react-bootstrap";
-import Axios from "axios";
-import UploadVideo from "../components/UploadVideo";
-import ReactPlayer from "react-player";
+import React from "react";
+import { Container } from "react-bootstrap";
 
 const Dashboard = () => {
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchVideos = () => {
-    setLoading(true)
-    Axios.get(`http://localhost:4000/videos`).then(res => {
-      const videoData = res.data;
-      setVideos(videoData)
-      setLoading(false)
-    }).catch(err => {
-      console.log(err);
-      setLoading(false);
-    })
-  }
-
-  useEffect(() => {
-    fetchVideos()
-  }, [])
-
-
-  const starVideo = ({id}) => {
-    console.log("video starred", id);
-  }
-
-
-  const playVideo = () => {
-    // return <ReactPlayer url="" controls />;
-    console.log("wanna play video");
-  };
-  
-
   return (
-    <UserLayout>
-      <UploadVideo />
-      { loading ? <Spinner animation="border" variant="primary" style={{ margin: "25vh auto" }}></Spinner> : <VideoFeeds playVideo={playVideo} starVideo={starVideo} videos={videos} /> }
-    </UserLayout>
+    <Container fluid>
+      HELLO WORLD
+    </Container>
   );
 };
 

@@ -1,79 +1,102 @@
 import React, { useState } from "react";
-import { DASHBOARD } from "../routes/router";
-import { GoogleLogin } from "react-google-login";
-import Layout from "../components/Layout/Layout";
-import { Container, Card, Col, Form, Alert, Button } from "react-bootstrap";
-import Axios from "axios";
+import { LOGIN } from "../routes/router";
+import {
+  Container,
+  Col,
+  Form,
+  Alert,
+  Button,
+  Spinner,
+} from "react-bootstrap";
+import Firebase from "../Firebase";
 
 const Register = (props) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const responseGoogle = (user) => {
+  const registerUser = async(e) => {
+    e.preventDefault();
     try {
-      if (user) {
-        Axios.post("http://localhost:4000/users", {
-          id: user.googleId,
-          fname: user.profileObj.name,
-          email: user.profileObj.email,
+      if (name || email || password === "") return setErrorMessage("Please Fill In All Fields");
+      if (password.length < 6)
+        return setErrorMessage("Password cannot be less than 6 characters");
+      else {
+        setLoading(true);
+        await Firebase.auth().createUserWithEmailAndPassword(name, email, password);
+        await Firebase.auth().updateProfile({
+          displayName: name
         })
-          .then((resp) => resp.data)
-          .then(sessionStorage.setItem("user", JSON.stringify(user)))
-          .catch((error) => setErrorMessage(error.message));
+        setLoading(false);
+        return props.history.push(LOGIN);
       }
-      return props.history.push(DASHBOARD);
     } catch (error) {
+      setLoading(false);
       setErrorMessage(error.message);
     }
   };
 
-  return (
-    <Layout>
-      <Container fluid>
-        <Col sm={12} md={{ span: 6, offset: 3 }}>
-          <Card style={{ margin: "4rem" }}>
-            <Card.Body>
-              <h5>Register</h5>
-              <hr />
-              <Form>
-                {errorMessage ? <Alert>{errorMessage}</Alert> : null}
 
-                <Form.Group>
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" />
-                </Form.Group>
+  return loading ? (
+    <Spinner animation="border" variant="primary" style={styles.spinner}>Loading</Spinner>
+  ) : (
+    <Container fluid>
+      <Col sm={12} md={{ span: 6, offset: 3 }}>
+        <h5 style={{ marginTop: '2rem' }}>Register</h5>
+        <hr />
+        <Form onSubmit={registerUser}>
+          {errorMessage ? (
+            <Alert variant="warning">{errorMessage}</Alert>
+          ) : null}
+          <Form.Group>
+            <Form.Label htmlFor="username">Name</Form.Label>
+            <Form.Control
+              type="text"
+              id="username"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
 
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control type="email" />
-                </Form.Group>
+          <Form.Group>
+            <Form.Label htmlFor="email">Email Address</Form.Label>
+            <Form.Control
+              type="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" />
-                </Form.Group>
+          <Form.Group>
+            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Control
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
 
-                <Button variant="primary" size="md" block>
-                  Register
-                </Button>
+          <Button variant="primary" size="md" type="submit" block>
+            REGISTER
+          </Button>
+        </Form>
+        <hr />
 
-                <hr />
-                <div style={{ textAlign: "center" }}>
-                  <GoogleLogin
-                    className="my-2"
-                    clientId={process.env.REACT_APP_CLIENT_ID}
-                    buttonText="SignUp With Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    cookiePolicy={"single_host_origin"}
-                  />
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Container>
-    </Layout>
+        <Button size="md" variant='outline-success'>
+          <i className="fas fa-google"></i> Google SignIn
+        </Button>
+      </Col>
+    </Container>
   );
 };
+
+const styles = {
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+}
 
 export default Register;
